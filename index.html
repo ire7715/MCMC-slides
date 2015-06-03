@@ -164,8 +164,9 @@
 						<p class="text left">
 							<ol>
 								<li>Start from an arbitrary starting point.</li>
-								<li>Go along with the trasition matrix. (Repeat until mixed)</li>
-								<li>Collect samples from the chain after it was mixed.</li>
+								<li>Draw a number &mu; from RNG &sim; Uniform[0, 1].</li>
+								<li>Generate the next state from which state &mu; has fallen on. (Repeat 2, 3 until it's mixed)</li>
+								<li>Collect generated samples from the chain after it was mixed.</li>
 							</ol>
 						</p>
 						<br>
@@ -195,13 +196,15 @@
 						<p class="text left">
 							<ol>
 								<li>Start from an arbitrary starting point.</li>
-								<li class="text">x<sub>i</sub> &asymp; argmax<sub>x<sub>i</sub></sub>{ P<sub>&phi;</sub>( X<sub>i</sub> = x<sub>i</sub> | <strong>x</strong><sub>-i</sub> ) }</li>
+								<li class="text">Draw a number &mu; from RNG &sim; distribution(x<sub>i</sub> | <strong>x</strong><sub>-i</sub> )).</li>
+								<!-- <li class="text">x<sub>i</sub> &asymp; argmax<sub>x<sub>i</sub></sub>{ P<sub>&phi;</sub>( X<sub>i</sub> = x<sub>i</sub> | <strong>x</strong><sub>-i</sub> ) }</li> -->
+								<li class="text">Generate x<sub>i</sub> depends on which state has &mu; fallen on. (Repeat until all x<sub>i</sub> are generated.) <br>[ The probability of each transition is P<sub>&phi;</sub>( X<sub>i</sub> = x<sub>i</sub> | <strong>x</strong><sub>-i</sub> ) ]</li>
 								<li>Let <strong>x</strong> be a new instance of Gibbs chain, repeat step 2 to generate a sequence.</li>
 							</ol>
 						</p>
 						<h4 class="bar block left">Validity:</h4>
 						<p class="text left clear">
-							If all probability are greater than 0, the Gibbs chain must be ragular.
+							&emsp;If all probability are greater than 0, the Gibbs chain must be ragular, which doesn't imply fast mixing.
 						</p>
 					</section>
 					<section>
@@ -220,15 +223,29 @@
 					</section>
 				</section>
 
+				<section>
+					<h3 class="bar right">Conclusion</h3>
+					<p class="text left clear">
+						&emsp;Approach the theoretical distribution with Monte Carlo(random sampling), no more the most probable trapping.<br><br>
+						&emsp;Both of MCMC and Gibbs sampling are specific cases of Metropolis-Hasting<sub><a href="#/6">[2, 4]</a></sub> algorithm, they are easier to implement and understood. But converge in a longer time for some cases.
+					</p>
+					<aside class="notes">
+						By using Monte Carlo(random sampling), we are able to construct a chain which is close enough to given distribution. And we are no longer be trapped in the most possible transition.
+						Both of MCMC and Gibbs are specific cases of Metropolis-Hasting algorithm, they are easier to implement and understood. But more constrainted and converge slower. To learn more about Metrapolis-Hasting, the reference [2, 4] gives a pretty detailed instruction.
+					</aside>
+				</section>
+
 				<!-- Example of nested vertical slides -->
 				<section>
 					<h3 class="bar right">References</h3>
 					<p class="text left">
 						<ul>
-							<li>[1] <a href="https://stats.stackexchange.com/questions/165/how-would-you-explain-markov-chain-monte-carlo-mcmc-to-a-layperson#">Stackoverflow - How would you explain MCMC?</a></li>
-							<li>[2] <a href="https://www.coursera.org/course/pgm">Coursera - Probabilistic Graphical Models by Daphne Koller</a></li>
-							<li>[3] <a href="http://blog.sina.com.cn/s/blog_5033f3b40101jfqu.html">Monte Carlo方法 & Gibbs Sampling</a></li>
-							<li>[4] <a href="http://pareto.uab.es/mcreel/IDEA2015/MCMC/mcmc.pdf">Markov Chain Monte Carlo by Patrick Lam</a></li>
+							<li>[1] <a href="https://stats.stackexchange.com/questions/165/how-would-you-explain-markov-chain-monte-carlo-mcmc-to-a-layperson#">Cross Validated - How would you explain MCMC?</a></li>
+							<li>[2] <a href="https://www.coursera.org/course/pgm">Coursera - Probabilistic Graphical Models by <i>Daphne Koller</i></a></li>
+							<li>[3] (Chinese) <a href="http://blog.sina.com.cn/s/blog_5033f3b40101jfqu.html">Monte Carlo方法 & Gibbs Sampling</a></li>
+							<li>[4] <a href="http://pareto.uab.es/mcreel/IDEA2015/MCMC/mcmc.pdf">Markov Chain Monte Carlo by <i>Patrick Lam</i></a></li>
+							<li>[5] (Chinese) <a href="http://www.52nlp.cn/lda-math-mcmc-%E5%92%8C-gibbs-sampling2">MCMC & Gibbs Sampling</a></li>
+							<li>[6] <a href="https://stats.stackexchange.com/questions/45946/generating-samples-from-gibbs-sampling">Cross Validated - Gibbs sampling techniques</a></li>
 						</ul>
 					</p>
 				</section>
