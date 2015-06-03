@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Markov Chain Monte Carlo</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+		<link rel="stylesheet" href="css/personalize.css">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+		<script src="js/personalize.js"></script>		
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2 class="bar left">Markov Chain Monte Carlo</h1><br>
+					<h4 class="text right">Ire Sun</h3>
+					<div class="powered">
+						<small>Powered by <a href="http://hakim.se">reveal.js</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small>
+					</div>
+				</section>
+
+				<section>
+					<section class="fragments">
+						<h2 class="bar right">What is Monte Carlo?</h2>
+						<div class="fragment">
+							<img class="block right space" width="310" height="144" src="img/Monte_Carlo.jpg">
+							<h3 class="text left">Geographically...</h3>
+							<p class="text right">
+								&emsp;A city in Monaco, which is famous because of Grand Casino.
+							</p>
+						</div>
+						<div class="fragment">
+							<h3 class="text left">Mathematically, </h3>
+							<p class="text right">
+								A strategy that using randomly sampling to approach realistic.
+							</p>
+						</div>
+					</section>
+					<section>
+						<h2 class="bar right">Illustration to Monte Carlo</h2>
+						<svg id="MC-demo" width="500" height="500" style="background-color: white;" class="block left">
+							
+						</svg>
+						<form class="mc-demo">
+							<input type="number" placeholder="#spots" style="font-size: 30px;height: 70px;width: 250px;"><button style="font-size: 30px;height: 70px;width: 150px;" onclick="genMCDemo();">Generate</button>
+							<p>
+								<p class="text yellow">Def:<br>A = #spots in the arc, <br>B = # of all spots<br></p>
+								A : B = &pi; / 4 : 1<br>
+								&rArr; A / B = &pi; / 4<br>
+								&rArr; 4 * A / B = &pi;<br>
+								A = <b id="mcdemoA" class="text lightblue"></b><br>
+								B = <b id="mcdemoB" class="text lightblue"></b><br>
+								4A / B = <b id="mcdemoC" class="text lightblue"></b><br>
+							</p>
+						</form>
+					</section>
+				</section>
+
+				<section>
+						<h2 class="bar right">What is Monte Carlo going to do with Markov Chain?</h2>
+						<p>
+							<!-- Sampling from a given distribution Makov Chain. <br><br><br><br><br><br><br><br><br><br><br><br> -->
+							<ul>
+								<li>The idea of Markov Chain</li>
+								<li>Given Markov Chain</li>
+								<li>Sampling with Monte Carlo</li>
+							</ul>
+						</p>
+						<aside class="notes">
+							Markov chain gives us an idea to model a problem of trasition states. So we can easily compute the probabiltiy for a given path.<br>
+							But, in practical, we are given the distribution of a Markov chain. How do we generate a chain follows the given distribution? <br>
+							Here comes the Monte Carlo, the idea of Monte Carlo tells us. The greater sample set is, the closer theoretical value we are going to reach.<!-- when the sample set is great enough, we are going to approach the theoretical value. -->
+						</aside>
+				</section>
+
+				<section>
+					<section>
+						<h3 class="bar right">Prerequisite of MCMC - Regularity</h3>
+						<p>
+							The Maokov Chain has to be a <strong class="text yellow">"regular"</strong> Markov Chain.<br>
+							<div class="space top">
+								<h4 class="bar block left">Definition:</h4><br>
+								<p class="text right">
+									&emsp;A Markov Chain converges to a unique <strong class="text lightblue">stationary distibution</strong> regardless of starting state.
+								</p>
+							</div>
+							<div class="space top">
+								<h4  class="bar block left">Alternative:</h4><br>
+								<p class="text right">
+									&emsp;A Markov Chain is regular if there exists k such that, for every x, x', the probability of getting from x to x' in exactly k step is > 0.
+								</p>
+							</div>
+						</p>
+					</section>
+					<section>
+						<h3 class="bar right">What is Stationary Distribution?</h3>
+						<p class="text left">
+							&emsp;As the time goes by, the probability from starting state to the specific state will converge to a fixed number.
+							<h4 class="bar block left">Mathematical representation:</h4>
+							<p class="text clear">lim<sub>k&rarr;&infin;</sub>P<sup>k</sup>=<strong>1</strong>&pi;</p>
+						</p>
+					</section>
+					<section class="fragments">
+						<h3 class="bar right">Nonexistance of Stationary Distribution</h3>
+						<h4 class="bar block left">Example</h4>
+						<p class="clear">
+							<img class="back white" src="https://upload.wikimedia.org/math/6/7/a/67a892b5d7c58d942e874489ec8454fc.png" alt="https://en.wikipedia.org/wiki/Markov_chain#Time-homogeneous_Markov_chain_with_a_finite_state_space" title="https://en.wikipedia.org/wiki/Markov_chain#Time-homogeneous_Markov_chain_with_a_finite_state_space">
+						</p>
+						<p class="fragment">P will never converge.</p>
+						<h4 class="fragment bar block left">Sufficient condition:</h4>
+						<p class="fragment text left clear">
+							&emsp;Every two states are connected.
+						</p>
+						<p class="fragment text left">
+							&emsp;At least one state has a self-trasition path.
+						</p>
+						<aside class="notes">
+							Could a Stationary Distribution not exist for a Markov Chain?
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h3 class="bar right">Markov Chain Monte Carlo</h3>
+						<p class="text left">
+							<strong class="text yellow">Goal:</strong> To obtain a sequence which is under the stationary distribution.
+						</p>
+						<p class="text left">
+							<ol>
+								<li>Start from an arbitrary starting point.</li>
+								<li>Go along with the trasition matrix. (Repeat until mixed)</li>
+								<li>Collect samples from the chain after it was mixed.</li>
+							</ol>
+						</p>
+						<br>
+						<p class="text left">
+							&emsp;<strong class="text lightblue">Mixed</strong> means the distribution from different windows are close enough.
+						</p>
+					</section>
+					<section>
+						<h3 class="bar right">Summary - Markov Chain Monte Carlo</h3>
+						<div class="clear">&nbsp;</div>
+						<h4 class="bar block left">Pros</h4>
+						<p class="text left clear">
+							&emsp;Easy to impelement.<br>
+						</p>
+						<h4 class="bar block left">Cons</h4>
+						<p class="text left clear">
+							&emsp;Lots of parameters.<br>
+							&emsp;Slow to converge.<br>
+							&emsp;Hard to tell whether it is mixing.
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h3 class="bar right">Algorithm - Gibbs Sampling</h3>
+						<p class="text left">
+							<ol>
+								<li>Start from an arbitrary starting point.</li>
+								<li class="text">x<sub>i</sub> &asymp; argmax<sub>x<sub>i</sub></sub>{ P<sub>&phi;</sub>( X<sub>i</sub> = x<sub>i</sub> | <strong>x</strong><sub>-i</sub> ) }</li>
+								<li>Let <strong>x</strong> be a new instance of Gibbs chain, repeat step 2 to generate a sequence.</li>
+							</ol>
+						</p>
+						<h4 class="bar block left">Validity:</h4>
+						<p class="text left clear">
+							If all probability are greater than 0, the Gibbs chain must be ragular.
+						</p>
+					</section>
+					<section>
+						<h3 class="bar right">Summary - Gibbs Sampling</h3>
+						<div class="clear">&nbsp;</div>
+						<h4 class="bar block left">Pros</h4>
+						<p class="text left clear">
+							&emsp;Easy to impelement.<br>
+							&emsp;Compution is easy, because the non-neighbor bode transition probability are canceled out.
+						</p>
+						<h4 class="bar block left">Cons</h4>
+						<p class="text left clear">
+							&emsp;When the probability are biased, mixing could take a long time or forever.<br>
+							&emsp;Only applies if we can sample from product of probability.
+						</p>
+					</section>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<h3 class="bar right">References</h3>
+					<p class="text left">
+						<ul>
+							<li>[1] <a href="https://stats.stackexchange.com/questions/165/how-would-you-explain-markov-chain-monte-carlo-mcmc-to-a-layperson#">Stackoverflow - How would you explain MCMC?</a></li>
+							<li>[2] <a href="https://www.coursera.org/course/pgm">Coursera - Probabilistic Graphical Models by Daphne Koller</a></li>
+							<li>[3] <a href="http://blog.sina.com.cn/s/blog_5033f3b40101jfqu.html">Monte Carlo方法 & Gibbs Sampling</a></li>
+							<li>[4] <a href="http://pareto.uab.es/mcreel/IDEA2015/MCMC/mcmc.pdf">Markov Chain Monte Carlo by Patrick Lam</a></li>
+						</ul>
+					</p>
+				</section>
+
+				<section>
+					<h1 class="bar block left">THE END</h1>
+					<div class="clear"></div>
+					<p class="text right">
+						Thanks for your attention.
+					</p>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

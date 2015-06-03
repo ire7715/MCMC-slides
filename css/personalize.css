@@ -1,0 +1,82 @@
+body{	/* classroom contrain */
+	width: 800px;
+	height: 600px;
+	margin: 0 auto;
+}
+
+.bar{
+    display: inline-block;
+	position: relative;
+	margin: 20px;
+}
+.bar:after{
+	content: '';
+	width: 60%;
+	height: 4px;
+	background: #e7ad52;
+	position: absolute;
+	bottom: -4px;
+}
+.bar.left:after{
+    left: 0;
+}
+.bar.right:after{
+    right: 0;
+}
+.text.right{
+	text-align: right;
+}
+.text.left{
+	text-align: left;
+}
+.text.red{
+	color: #faa9b4;
+}
+.text.lightblue{
+	color: #b2b2ff;
+}
+.text.yellow{
+	color: #ffff99;
+}
+.text sub, .text sup{
+	font-size: 20px;
+}
+.block.left{
+	float: left;
+}
+.block.right{
+	float: right;
+}
+.block:after{
+	content: ' ';
+	clear: both;
+}
+.space.top{
+	margin-top: 30px;
+}
+.space.right{
+	margin-right: 30px;
+}
+.block.space.right{
+	position: relative;
+	right: -10px;
+}
+.innerspace{
+	box-sizing: border-box;
+}
+.innerspace.right{
+	padding-right: 10px;box-sizing: border-box;
+}
+.clear{
+	clear: both;
+}
+.back.white{
+	background-color: #eee;
+}
+form{
+	margin: 10px;
+}
+input[type="text"], input[type="password"], input[type="number"]{
+	padding: 15px;
+	box-sizing: border-box;
+}
